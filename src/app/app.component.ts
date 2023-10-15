@@ -12,15 +12,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class AppComponent implements OnInit {
   title = 'opensynth';
-  audioContext = new AudioContext();
-  oscNode = new OscillatorNode(this.audioContext, {
-    frequency: 380,
-    type: 'square',
-  });
-  gainNode = new GainNode(this.audioContext);
   volume = 1;
+  audioContext!: AudioContext;
+  oscNode!: OscillatorNode;
+  gainNode!: GainNode;
 
   ngOnInit(): void {
+    this.audioContext = new AudioContext();
+    this.oscNode = new OscillatorNode(this.audioContext, {
+      frequency: 380,
+      type: 'square',
+    });
+    this.gainNode = new GainNode(this.audioContext);
     this.gainNode.gain.setValueAtTime(0, 0);
     this.oscNode.connect(this.gainNode).connect(this.audioContext.destination);
   }
