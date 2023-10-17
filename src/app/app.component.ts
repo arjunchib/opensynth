@@ -1,14 +1,18 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { OscillatorNodeComponent } from './oscillator-node/oscillator-node.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule],
+  imports: [CommonModule, RouterOutlet, FormsModule, OscillatorNodeComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  host: {
+    class: 'h-screen w-screen block overflow-visible',
+  },
 })
 export class AppComponent implements OnInit {
   title = 'opensynth';
@@ -16,6 +20,17 @@ export class AppComponent implements OnInit {
   audioContext!: AudioContext;
   oscNode!: OscillatorNode;
   gainNode!: GainNode;
+
+  @HostBinding('style.transform') transform = 'translate(0)';
+  @HostBinding('style.transform-origin') transformOrigin = 'top left';
+  left = 0;
+  top = 0;
+  scale = 1;
+  offsetX = 0;
+  offsetY = 0;
+  preScaleLeft = 0;
+  preScaleTop = 0;
+  preScaleScale = 1;
 
   ngOnInit(): void {
     this.audioContext = new AudioContext();
@@ -49,5 +64,66 @@ export class AppComponent implements OnInit {
     const release = 0.8;
     const time = this.audioContext.currentTime;
     this.gainNode.gain.linearRampToValueAtTime(0, time + release);
+  }
+
+  private setTransform() {
+    this.transform = `translate(${this.left}px, ${this.top}px) scale(${this.scale})`;
+  }
+
+  @HostListener('window:mousemove', ['$event']) mmove(e: MouseEvent) {
+    this.offsetX = e.clientX;
+    this.offsetY = e.clientY;
+  }
+
+  @HostListener('window:mousewheel', ['$event']) move(e: WheelEvent) {
+    e.preventDefault();
+    if (e.ctrlKey) {
+      console.log(e.deltaY);
+    }
+    this.left -= e.deltaX;
+    this.top -= e.deltaY;
+    this.setTransform();
+  }
+
+  @HostListener('window:keydown.space') reset() {
+    this.left = 0;
+    this.top = 0;
+    this.setTransform();
+  }
+
+  @HostListener('window:gesturechange', ['$event']) gestureMove(e: any) {
+    e.preventDefault();
+    this.scaler(e);
+  }
+
+  @HostListener('window:gesturestart', ['$event']) gestureStart(e: any) {
+    e.preventDefault();
+    this.preScaleLeft = this.left;
+    this.preScaleTop = this.top;
+    this.preScaleScale = this.scale;
+    this.scaler(e);
+  }
+
+  @HostListener('window:gestureend', ['$event']) gestureEnd(e: Event) {
+    e.preventDefault();
+  }
+
+  private scaler(e: any) {
+    this.scale = this.preScaleScale * e.scale;
+    const left = this.preScaleLeft;
+    const top = this.preScaleTop;
+    const x1 = this.offsetX - left;
+    this.left = left + x1 * (1 - e.scale);
+    const y1 = this.offsetY - top;
+    this.top = top + y1 * (1 - e.scale);
+    // console.log({
+    //   ogLeft: left,
+    //   offset: this.offsetX,
+    //   scale: this.scale,
+    //   escale: e.scale,
+    //   x1,
+    //   left: this.left,
+    // });
+    this.setTransform();
   }
 }
