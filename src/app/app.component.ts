@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { OscillatorNodeComponent } from './oscillator-node/oscillator-node.component';
+import { DestinationNodeComponent } from './destination-node/destination-node.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule, OscillatorNodeComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    FormsModule,
+    OscillatorNodeComponent,
+    DestinationNodeComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   host: {
@@ -116,14 +123,6 @@ export class AppComponent implements OnInit {
     this.left = left + x1 * (1 - e.scale);
     const y1 = this.offsetY - top;
     this.top = top + y1 * (1 - e.scale);
-    // console.log({
-    //   ogLeft: left,
-    //   offset: this.offsetX,
-    //   scale: this.scale,
-    //   escale: e.scale,
-    //   x1,
-    //   left: this.left,
-    // });
     this.setTransform();
   }
 }

@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { DraggableDirective } from '../draggable/draggable.directive';
 
 @Component({
-  selector: 'app-oscillator-node',
+  selector: 'app-destination-node',
   standalone: true,
   imports: [CommonModule, DraggableDirective],
-  templateUrl: './oscillator-node.component.html',
-  styleUrls: ['./oscillator-node.component.scss'],
+  templateUrl: './destination-node.component.html',
+  styleUrls: ['./destination-node.component.scss'],
 })
-export class OscillatorNodeComponent {}
+export class DestinationNodeComponent {}

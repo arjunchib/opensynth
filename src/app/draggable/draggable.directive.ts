@@ -12,6 +12,9 @@ import {
 export class DraggableDirective {
   @HostBinding('class.absolute') absolute = true;
   @HostBinding('class.select-none') selectNone = true;
+  @HostBinding('class.shadow-lg') get shadow() {
+    return !!this.dragging;
+  }
   @HostBinding('style.left.px') left = this.el.nativeElement.clientLeft;
   @HostBinding('style.top.px') top = this.el.nativeElement.clientTop;
   dragging?: [number, number];
