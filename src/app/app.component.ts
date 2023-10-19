@@ -1,9 +1,16 @@
-import { Component, HostBinding, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  HostListener,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { OscillatorNodeComponent } from './oscillator-node/oscillator-node.component';
 import { DestinationNodeComponent } from './destination-node/destination-node.component';
+import { ContextService } from './context/context.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +34,8 @@ export class AppComponent implements OnInit {
   audioContext!: AudioContext;
   oscNode!: OscillatorNode;
   gainNode!: GainNode;
+
+  private contextService = inject(ContextService);
 
   @HostBinding('style.transform') transform = 'translate(0)';
   @HostBinding('style.transform-origin') transformOrigin = 'top left';
@@ -96,6 +105,14 @@ export class AppComponent implements OnInit {
     this.left = 0;
     this.top = 0;
     this.setTransform();
+  }
+
+  @HostListener('window:keydown.w') w() {
+    this.contextService.mode = 'wire';
+  }
+
+  @HostListener('window:keydown.escape') esc() {
+    this.contextService.mode = 'normal';
   }
 
   @HostListener('window:gesturechange', ['$event']) gestureMove(e: any) {
