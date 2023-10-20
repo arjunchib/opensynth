@@ -108,11 +108,11 @@ export class AppComponent implements OnInit {
   }
 
   @HostListener('window:keydown.w') w() {
-    this.contextService.mode = 'wire';
+    this.contextService.mode.next('wire');
   }
 
   @HostListener('window:keydown.escape') esc() {
-    this.contextService.mode = 'normal';
+    this.contextService.mode.next('normal');
   }
 
   @HostListener('window:gesturechange', ['$event']) gestureMove(e: any) {

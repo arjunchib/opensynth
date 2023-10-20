@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 type Mode = 'normal' | 'wire';
 
@@ -6,5 +7,5 @@ type Mode = 'normal' | 'wire';
   providedIn: 'root',
 })
 export class ContextService {
-  mode: Mode = 'normal';
+  mode = new BehaviorSubject<Mode>('normal');
 }

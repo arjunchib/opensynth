@@ -24,7 +24,7 @@ export class DraggableDirective {
   constructor(private el: ElementRef<HTMLElement>) {}
 
   @HostListener('mousedown', ['$event']) onMouseDown(e: MouseEvent) {
-    if (this.contextService.mode !== 'normal') return;
+    if (this.contextService.mode.value !== 'normal') return;
     this.dragging = [e.clientX - this.left, e.clientY - this.top];
     this.shadow = true;
   }
