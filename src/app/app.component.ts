@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { OscillatorNodeComponent } from './oscillator-node/oscillator-node.component';
 import { DestinationNodeComponent } from './destination-node/destination-node.component';
 import { ContextService } from './context/context.service';
+import { DebuggerService } from './debugger/debugger.service';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,7 @@ export class AppComponent implements OnInit {
   oscNode!: OscillatorNode;
   gainNode!: GainNode;
 
+  protected debuggerService = inject(DebuggerService);
   private contextService = inject(ContextService);
 
   @HostBinding('style.transform') transform = 'translate(0)';
@@ -57,6 +59,7 @@ export class AppComponent implements OnInit {
     this.gainNode = new GainNode(this.audioContext);
     this.gainNode.gain.setValueAtTime(0, 0);
     this.oscNode.connect(this.gainNode).connect(this.audioContext.destination);
+    this.debuggerService.add(0, 0);
   }
 
   start() {

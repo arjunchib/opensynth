@@ -1,5 +1,6 @@
 import {
   Directive,
+  ElementRef,
   HostBinding,
   OnDestroy,
   OnInit,
@@ -22,6 +23,7 @@ const WIRE_CLASSES = [
 export class WireableDirective implements OnInit, OnDestroy {
   @HostBinding('class') class: string[] = [];
 
+  private el = inject(ElementRef<HTMLDivElement>);
   private contextService = inject(ContextService);
   private readonly destroy = new Subject<void>();
 
