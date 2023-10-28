@@ -15,9 +15,12 @@
 </div> -->
 <app-oscillator-node />
 <app-destination-node />
-<div
-  *ngFor="let point of debuggerService.points | async"
-  [style.left.px]="point[0]"
-  [style.top.px]="point[1]"
-  class="border rounded-full border-yellow-400 bg-yellow-200 w-2 h-2 absolute -translate-x-1/2 -translate-y-1/2"
-></div>
+<svg class="absolute inset-0 z-10 pointer-events-none w-full h-full">
+  <circle
+    *ngFor="let point of debuggerService.points | async"
+    [attr.cx]="point[0]"
+    [attr.cy]="point[1]"
+    [attr.r]="3"
+    class="stroke-1 stroke-yellow-400 fill-yellow-200"
+  ></circle>
+</svg>
