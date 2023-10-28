@@ -8,12 +8,12 @@ export class DebuggerService {
   private _points = new Set<[number, number]>();
   points = new BehaviorSubject<Set<[number, number]>>(this._points);
 
-  add(x: number, y: number) {
-    this._points.add([x, y]);
+  add(points: [number, number][]) {
+    points.forEach((point) => this._points.add(point));
     this.points.next(this._points);
   }
 
-  clear(x: number, y: number) {
+  clear() {
     this._points.clear();
     this.points.next(this._points);
   }

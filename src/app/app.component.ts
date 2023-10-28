@@ -59,7 +59,6 @@ export class AppComponent implements OnInit {
     this.gainNode = new GainNode(this.audioContext);
     this.gainNode.gain.setValueAtTime(0, 0);
     this.oscNode.connect(this.gainNode).connect(this.audioContext.destination);
-    this.debuggerService.add(0, 0);
   }
 
   start() {
