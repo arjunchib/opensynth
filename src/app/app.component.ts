@@ -12,6 +12,7 @@ import { OscillatorNodeComponent } from './oscillator-node/oscillator-node.compo
 import { DestinationNodeComponent } from './destination-node/destination-node.component';
 import { ContextService } from './context/context.service';
 import { DebuggerService } from './debugger/debugger.service';
+import { ArrowService } from './arrow/arrow.service';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
   gainNode!: GainNode;
 
   protected debuggerService = inject(DebuggerService);
+  protected arrowService = inject(ArrowService);
   private contextService = inject(ContextService);
 
   @HostBinding('style.transform') transform = 'translate(0)';

@@ -24,3 +24,12 @@
     class="stroke-1 stroke-yellow-400 fill-yellow-200"
   ></circle>
 </svg>
+<svg class="absolute inset-0 z-0 pointer-events-none w-full h-full">
+  <line
+    *ngFor="let arrow of arrowService.arrows | async"
+    [attr.x1]="arrow.start[0]"
+    [attr.y1]="arrow.start[1]"
+    [attr.x2]="arrow.end[0]"
+    [attr.y2]="arrow.end[1]"
+  ></line>
+</svg>

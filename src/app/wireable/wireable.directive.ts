@@ -8,8 +8,9 @@ import {
   inject,
 } from '@angular/core';
 import { ContextService } from '../context/context.service';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, filter, takeUntil } from 'rxjs';
 import { DebuggerService } from '../debugger/debugger.service';
+import { ArrowService } from '../arrow/arrow.service';
 
 const WIRE_CLASSES = [
   'hover:outline-2',
@@ -23,15 +24,39 @@ const WIRE_CLASSES = [
   standalone: true,
 })
 export class WireableDirective implements OnInit, OnDestroy {
+  static click = new Subject<ElementRef<HTMLDivElement>>();
+
   @HostBinding('class') class: string[] = [];
 
   private el: ElementRef<HTMLDivElement> = inject(ElementRef);
   private contextService = inject(ContextService);
   private debuggerService = inject(DebuggerService);
+  private arrowService = inject(ArrowService);
+  private active = false;
 
   private readonly destroy = new Subject<void>();
 
   ngOnInit(): void {
+    this.watchMode();
+    this.watchClicks();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+
+  @HostListener('click') click() {
+    WireableDirective.click.next(this.el);
+  }
+
+  private watchClicks() {
+    WireableDirective.click
+      .pipe(takeUntil(this.destroy))
+      .subscribe((el) => (this.active = this.el !== el));
+  }
+
+  private watchMode() {
     this.contextService.mode
       .pipe(takeUntil(this.destroy))
       .subscribe((value) => {
@@ -40,11 +65,6 @@ export class WireableDirective implements OnInit, OnDestroy {
           this.debuggerService.add(this.points);
         }
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
   }
 
   private get points(): [number, number][] {
